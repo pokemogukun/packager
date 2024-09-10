@@ -1,108 +1,69 @@
-# TurboWarp Packager
+#ターボワープパッケージ
 
-https://packager.turbowarp.org/
+Https://packager.turbowarp.org/
 
-Converts Scratch projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux.
+Scratch プロジェクトを HTML ファイル、zip アーカイブ、または Windows、macOS、および Linux の実行可能プログラムに変換します。
 
-## Development
+## 開発
 
-Install dependencies:
-
-```
-npm ci
-```
-
-Start in development mode:
+依存関係をインストールする：
 
 ```
-npm start
-```
 
-Then visit http://localhost:8947. Manually refresh to see changes.
-
-Packaged projects generated while in development mode should not be distributed. Instead, you should run a production build to significantly reduce file size of both the website and the packager.
+Npm ci
 
 ```
-npm run build-prod
-```
 
-Output will be located in the `dist` folder.
-
-The general layout of `src` is:
-
- - packager: The code that downloads and packages projects.
- - p4: The Svelte website for the packager. "p4" is the name that the packager uses internally to refer to itself.
- - scaffolding: A minimal Scratch project player. Handles most of the boring details of running Scratch projects like handling mouse inputs.
- - common: Some files used by both scaffolding and the packager.
- - addons: Optional addons such as gamepad support or pointerlock.
- - locales: Translations. en.json contains the original English messages. The other languages are translated by volunteers and imported by an automated script. ([you can help](https://docs.turbowarp.org/translate))
- - build: Various build-time scripts such as webpack plugins and loaders.
-
-## Tips for forks
-
-We strive to make the packager easy to fork, even for mods that aren't based on TurboWarp. Reading this section, at least the first half, should make it much easier to do so.
-
-### Packages
-
-If you want to change the scratch-vm/scratch-render/scratch-audio/scratch-storage/etc. used, this is simple:
-
- - `npm install` or `npm link` your package. The package name does not matter.
- - Update src/scaffolding/scratch-libraries.js to import the packages with the name you have. (some of our packages are prefixed with `@turbowarp/` while others are still just `scratch-vm` -- just make sure they match yours)
-
-Then just rebuild. You can even install a vanilla scratch-vm and all core functionality will still work (but optional features such as interpolation, high quality pen, stage size, etc. may not work)
-
-Note that npm is a very buggy piece of software and our dependency tree is very large. Occasionally you might get errors about missing dependencies, which should go away if you run `npm install`.
-
-### Deployment
-
-The packager is deployed as a simple static website. You can host it anywhere by just copying the `dist` folder after a build.
-
-We use GitHub Actions and GitHub Pages to manage our deployment. If you want to do this too:
-
- - Fork the repository on GitHub and push your changes.
- - Go to your fork's settings on GitHub and enable GitHub Pages with the source set to GitHub Actions.
- - Go to the "Actions" tab and enable GitHub Actions if it isn't already enabled.
- - Push commits to the "master" branch.
- - In a few minutes, your site will automatically be built and deployed to GitHub Pages.
-
-### Branding
-
-We ask that you at least take a moment to rename the website by editting `src/packager/brand.js` with your own app name, links, etc.
-
-### Large files
-
-Large files such as NW.js, Electron, and WKWebView executables are stored on an external server outside of this repository. While we aren't actively removing old files (the server still serves files unused since November 2020), we can't promise they will exist forever. The packager uses a secure checksum to validate these downloads. Forks are free to use our servers, but it's easy to setup your own if you'd prefer (it's just a static file server; see `src/packager/large-assets.js` for more information).
-
-### Service worker
-
-Set the environment variable `ENABLE_SERVICE_WORKER` to `1` to enable service worker for offline support (experimental, not 100% reliable). This is not recommended in development. Our GitHub Actions deploy script uses this by default.
-
-## Standalone builds
-
-The packager supports generating "standalone builds" that are single HTML files containing the entire packager. Large files such as Electron binaries will still be downloaded from a remote server as needed. You can download prebuilt standalone builds from [our GitHub releases](https://github.com/TurboWarp/packager/releases). These can be useful if our website is blocked or you don't have a reliable internet connection. Note that standalone builds do not contain an update checker, so do check on your own occasionally.
-
-To make a production standalone build locally:
+開発モードで開始：
 
 ```
-npm run build-standalone-prod
-```
 
-The build outputs to `dist/standalone.html`.
-
-## Node.js module and API
-
-See [node-api-docs/README.md](node-api-docs/README.md) for Node.js API documentation.
-
-To build the Node.js module locally:
+Npmスタート
 
 ```
-npm run build-node-prod
+
+その後、http://localhost:8947にアクセスしてください。手動で更新して変更を確認します。
+
+開発モード中に生成されたパッケージ化されたプロジェクトは、配布しないでください。代わりに、本番ビルドを実行して、Webサイトとパッケージの両方のファイルサイズを大幅に縮小する必要があります。
+
 ```
 
-## License
+Npm 実行 build-prod
 
-<!-- Make sure to also update COPYRIGHT_NOTICE in src/packager/brand.js -->
+```
 
-Copyright (C) 2021-2024 Thomas Weber
+出力は `dist` フォルダにあります。
 
-This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+`src`の一般的なレイアウトは次のとおりです。
+
+- packager: プロジェクトをダウンロードしてパッケージ化するコード。
+
+- p4: パッケージャーのSvelteウェブサイト。「p4」は、パッケージャーが内部で自分自身を指すために使用する名前です。
+
+- 足場：最小限のスクラッチプロジェクトプレーヤー。マウス入力の取り扱いなど、スクラッチプロジェクトの実行に関する退屈な詳細のほとんどを処理します。
+
+- 共通：足場とパッケージの両方で使用されるいくつかのファイル。
+
+- アドオン：ゲームパッドのサポートやポインターロックなどのオプションのアドオン。
+
+- ロケール：翻訳。en.jsonには、元の英語のメッセージが含まれています。他の言語はボランティアによって翻訳され、自動スクリプトによってインポートされます。（[あなたは助けることができます]（https://docs.turbowarp.org/translate））
+
+- ビルド：Webpackプラグインやローダーなどのさまざまなビルドタイムスクリプト。
+
+##フォークのヒント
+
+TurboWarp に基づいていない mod であっても、パッケージをフォークしやすくするよう努めています。少なくとも前半は、このセクションを読むと、そうすることがはるかに簡単になるはずです。
+
+###パッケージ
+
+Scratch-vm/scratch-render/scratch-audio/scratch-storage/etc. を変更する場合は、簡単です。
+
+- `npm install` または `npm link` あなたのパッケージ。パッケージ名は関係ありません。
+
+- src/scaffolding/scratch-libraries.js を更新して、お持ちの名前のパッケージをインポートします。（一部のパッケージには `@turbowarp/` の接頭辞が付いていますが、他のパッケージはまだ `scratch-vm` です。一致していることを確認してください）
+
+その後、再構築するだけです。バニラスクラッチVMをインストールしても、すべてのコア機能は引き続き機能します（ただし、補間、高品質のペン、ステージサイズなどのオプション機能は機能しない場合があります）
+
+Npmは非常にバグのあるソフトウェアであり、依存関係ツリーは非常に大きいことに注意してください。依存関係が欠落しているというエラーが発生することがありますが、`npm install`を実行すると消えます。
+
+### 展開
